@@ -1,0 +1,13 @@
+<%= render :partial => 'header' %>
+
+<div id="hacks_body">
+
+<%= button_to 'Shuffle Hacks', shuffle_event_path(@event), :form_class => 'button_to_form', :class => 'btn btn-large btn-warning' if can? :shuffle, @event %>
+
+<h2>Presentation Order</h2>
+
+<ul class="unstyled hack_list">
+  <%= render :partial => 'hacks/listing', :collection => @hacks, :locals => {:presentation => true} %>
+</ul>
+
+</div>

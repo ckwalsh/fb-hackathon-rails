@@ -1,0 +1,70 @@
+<div style="width: 650px">
+<%= form_for([@event, @hack]) do |f| %>
+  <% if @hack.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hack.errors.count, "error") %> prohibited this hack from being saved:</h2>
+
+      <ul>
+      <% @hack.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name, :placeholder => 'AwesomeHack', :required => 'required' %>
+  
+  <%= f.label :description %>
+  <%= f.text_area :description, :rows => 6, :class => 'span5', :placeholder => 'One or two sentences about what your hack does and why you built it (required)', :required => 'required' %>
+  
+  <%= f.label :url %>
+  <%= f.text_field :url, :placeholder => 'http://www.facebook.com/', :class => 'span5' %>
+  
+  <%= f.label :source_url %>
+  <%= f.text_field :source_url, :placeholder => 'http://www.github.com/facebook/', :class => 'span5' %>
+  
+  <%= f.label :image_url %>
+  <%= f.text_field :image_url, :placeholder => 'http://i.imgur.com/bwAFI.jpg', :class => 'span5' %>
+
+  <% if @hack.new_record? %>
+    <label>Who did you work with? (You can add/remove people later)</label>
+    <%= javascript_tag do %>
+      friends_selected = <%= raw(@friends.to_json) %>;
+    <% end %>
+    <div id="jfmfs-container"></div>
+  <% else %>
+    <label>Confirmed Team Members (click to remove)</label>
+    <div class="facepile">
+    <% @hack.confirmed_members.each do |user| %>
+      <%= link_to(
+        avatar_tag(user),
+        event_hack_remove_member_path(@event, @hack, :user_id => user.id),
+        :method => :post,
+        :data => {:confirm => "Are you sure you want to remove #{user.name}?"}
+      ) %>
+    <% end %>
+    </div>
+  
+    <% unless @hack.unconfirmed_members.empty? %>
+      <label>Unconfirmed Team Members (click to confirm)</label>
+      <div class="facepile">
+      <% @hack.unconfirmed_members.each do |user| %>
+        <%= link_to(
+          avatar_tag(user),
+          event_hack_confirm_member_path(@event, @hack, :user_id => user.id),
+          :method => :post
+        ) %>
+      <% end %>
+      </div>
+    <% end %>
+  <% end %>
+  
+  <label class="checkbox important">
+      We need to present at the beginning because we need to leave or can't use the demo machine
+    <%= f.check_box :first %>
+  </label>
+  <br />
+  <%= f.submit :class => 'btn btn-success', :value => (@hack.new_record? ? 'Create Hack' : 'Update Hack'), :onclick => 'read_friend_list(this);' %>
+<% end %>
+</div>

@@ -1,0 +1,27 @@
+<h1>Upcoming Hacks</h1>
+
+<div class="row">
+  <div class="span11 offset1">
+    <% if @upcoming_events.empty? %>
+      <h3>No upcoming Hacks :(</h3>
+    <% else %>
+      <ul class="unstyled event_list">
+        <%= render :partial => 'listing', :collection => @upcoming_events %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+
+<h2>Past Hacks</h2>
+
+<div class="row">
+  <div class="span11 offset1">
+    <% if @past_events.empty? %>
+      <h3>No past Hacks :(</h3>
+    <% else %>
+      <ul class="unstyled event_list">
+        <%= render :partial => 'listing', :collection => @past_events %>
+      </ul>
+    <% end %>
+  </div>
+</div>

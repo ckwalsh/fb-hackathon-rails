@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  fbid: MyString
+  name: MyString
+  time_start: 2012-10-05 23:55:33
+  time_end: 2012-10-05 23:55:33
+
+two:
+  fbid: MyString
+  name: MyString
+  time_start: 2012-10-05 23:55:33
+  time_end: 2012-10-05 23:55:33

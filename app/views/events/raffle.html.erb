@@ -1,0 +1,12 @@
+<%= render :partial => 'header' %>
+
+<div id="raffle_body">
+  <% if @winner %>
+    <h2>And the Winner is...</h2>
+    <%= avatar_tag(@winner, 'large') %>
+    <h3><%= @winner.name %></h3>
+    <h4><%= @event.timezoneize(@now).strftime('%l:%M %p') %></h4>
+  <% else %>
+    <h2>No winners yet...</h2>
+  <% end %>
+</div>

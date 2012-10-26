@@ -1,0 +1,39 @@
+<h1>Listing Events</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Timezone</th>
+      <th>Hidden</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<% @events.each do |event| %>
+  <tr>
+    <td>
+      <%= link_to event.name, 'https://www.facebook.com/' + event.fbid %>
+    </td>
+    <td>
+      <%= event.time_start %>
+    </td>
+    <td>
+      <%= event.time_end %>
+    </td>
+    <td>
+      <%= event.timezone %>
+    </td>
+    <td>
+      <%= event.hidden ? 'Hidden' : '' %>
+    </td>
+    <td>
+      <%= link_to 'Toggle hidden status', toggle_hidden_event_path(event), :method => :post %>,
+      <%= link_to 'Destroy', event, :method => :delete, :data => { :confirm => 'Are you sure?' } %>
+     </td>
+  </tr>
+<% end %>
+  </tbody>
+</table>

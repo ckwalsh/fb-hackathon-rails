@@ -1,0 +1,83 @@
+<li id="hack_listing_<%= listing.id %>">
+  <div class="row">
+    <div class="span3">
+      <div class="hack_image_div">
+        <% if listing.image_url.blank? %>
+          <%= image_tag 'no_image.png', :class => 'hack_image' %>
+        <% else %>
+          <%= link_to listing.image_url do %>
+            <%= image_tag listing.image_url, :class => 'hack_image' %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="span9">
+      <h3><%= link_to listing.name, :anchor => "hack_listing_#{listing.id}" %></h3>
+      <% if (listing.submitted? && @api) && !presentation %>
+        <h4><%= link_to "Likes: #{listing.like_count(@api)}", "//www.facebook.com/#{listing.published_fbid}" %></h4>
+      <% end %>
+      <p><%= listing.description %></p>
+      <ul class="unstyled">
+        <% unless listing.url.blank? %>
+          <li>
+            <strong>Link:</strong>
+            <%= link_to listing.url, listing.url %>
+          </li>
+        <% end %>
+        <% unless listing.source_url.blank? %>
+          <li>
+            <strong>Source Code:</strong>
+            <%= link_to listing.source_url, listing.source_url %>
+          </li>
+        <% end %>
+        <li>
+          <strong>Built by:</strong><br />
+          <% listing.confirmed_members.each do |user| %>
+              <%= link_to(
+                avatar_tag(user),
+                fb_user_path(user)
+              ) %>
+          <% end %>
+        </li>
+        <% if !presentation %>
+        <% if can?(:edit, listing) && !listing.unconfirmed_members.empty? %>
+          <li>
+            <strong>Unconfirmed Teamates:</strong><br />
+            <% listing.unconfirmed_members.each do |user| %>
+                <%= link_to(
+                  avatar_tag(user),
+                  fb_user_path(user)
+                ) %>
+            <% end %>
+          </li>
+        <% elsif !listing.confirmed_member_ids.include?(@current_user.id) && !listing.unconfirmed_member_ids.include?(@current_user.id) && can?(:join, @hack) %>
+          <li>
+            <%= link_to 'I worked on this!', event_hack_join_path(@event, listing), :method => :post if can?(:join, @hack) %>
+          </li>
+        <% end %>
+        <% if listing.submitted? && (can?(:like, listing) || can?(:unlike, listing)) %>
+        <li>
+          <% unless listing.likes?(@current_user, @api) %>
+            <%= button_to 'Like Hack', event_hack_like_path(@event, listing), :form_class => 'button_to_form', :class => 'btn btn-large btn-success' if can? :like, listing %>
+          <% else %>
+            <%= button_to 'Unlike Hack', event_hack_unlike_path(@event, listing), :form_class => 'button_to_form', :class => 'btn btn-small btn-link' if can? :unlike, listing %>
+          <% end %>
+        </li>
+        <% end %>
+        <% if can?(:submit, listing) %>
+          <li>
+            <%= button_to 'Submit Hack', event_hack_submit_path(@event, listing), :form_class => 'button_to_form', :class => 'btn btn-large btn-primary' if can? :submit, listing %>
+          </li>
+        <% end %>
+        <% if can?(:edit, listing) || can?(:destroy, listing) %>
+          <li>
+            <strong>Admin:</strong>
+            <%= button_to 'Edit', edit_event_hack_path(@event, listing), :method => :get, :form_class => 'button_to_form', :class => 'btn btn-mini btn-warning' if can? :edit, listing %>
+            <%= button_to 'Delete', event_hack_path(@event, listing), :form_class => 'button_to_form', :method => :delete, :data => {:confirm => 'Are you sure?'}, :class => 'btn btn-mini btn-danger' if can? :destroy, listing %>
+          </li>
+        <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</li>

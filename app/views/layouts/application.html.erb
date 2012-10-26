@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hack</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '<%= Rails.configuration.fb_app_id %>', // App ID from the App Dashboard
+      channelUrl : '//<%= request.host_with_port %>/channel.html', // Channel File for x-domain communication
+      status     : true, // check the login status upon init?
+      cookie     : true, // set sessions cookies to allow your server to access the session?
+      xfbml      : true  // parse XFBML tags on this page?
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+    fb_init();
+
+  };
+
+  // Load the SDK's source Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/">Hacks</a>
+      <div>
+        <ul class="nav">
+          <% if can? :index, Event %>
+            <li><%= link_to 'Events Admin', events_path %></li>
+          <% end %>
+          <% if can? :index, EventSource %>
+            <li><%= link_to 'Event Source Admin', event_sources_path %></li>
+          <% end %>
+          <li>
+            <% if @current_user.id? %>
+              <%= link_to_function "Log out as #{@current_user.name}", 'fb_logout()' %>
+            <% else %>
+              <%= link_to_function "Sign in with Facebook", 'fb_login()' %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <%= render :partial => 'layouts/alerts' %>
+  <%= yield %>
+</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<h1>Listing hacks</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Url</th>
+    <th>Source url</th>
+    <th>Image url</th>
+    <th>Event</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hacks.each do |hack| %>
+  <tr>
+    <td><%= hack.name %></td>
+    <td><%= hack.description %></td>
+    <td><%= hack.url %></td>
+    <td><%= hack.source_url %></td>
+    <td><%= hack.image_url %></td>
+    <td><%= hack.event_id %></td>
+    <td><%= link_to 'Show', event_hack %></td>
+    <td><%= link_to 'Edit', event_hack_path(hack) %></td>
+    <td><%= link_to 'Destroy', event_hack, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hack', new_event_hack_path %>

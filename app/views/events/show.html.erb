@@ -1,0 +1,31 @@
+<%= render :partial => 'header' %>
+
+<div id="hacks_body">
+
+<% if @event.time_end > Time.now %>
+<%= button_to 'Create a Hack', new_event_hack_path(@event, @hack), :form_class => 'button_to_form', :method => :get, :class => 'btn btn-large btn-success' if can? :create, Hack %>
+<% end %>
+<%= button_to 'Presentation Order', order_event_path(@event), :method => :get, :form_class => 'button_to_form', :class => 'btn btn-large btn-primary' if can?(:order, @event) && !@event.hacks_completed.empty? %>
+<%= button_to 'Raffle a Prize', raffle_event_path(@event), :method => :get, :form_class => 'button_to_form', :class => 'btn btn-large btn-info' if can? :raffle, @event %>
+
+<h2>Completed Hacks</h2>
+
+<% if @event.hacks_completed.empty? %>
+  <p>Looks like there aren't any hacks ready yet. Keep working!</p>
+<% else %>
+<ul class="unstyled hack_list">
+  <%= render :partial => 'hacks/listing', :collection => @event.hacks_completed, :locals => {:presentation => false} %>
+</ul>
+<% end %>
+
+<h2>Hacks in Progress</h2>
+
+<% if @event.hacks_in_progress.empty? %>
+  <p>No hacks have been submitted yet. Get cracking!</p>
+<% else %>
+<ul class="unstyled hack_list">
+  <%= render :partial => 'hacks/listing', :collection => @event.hacks_in_progress, :locals => {:presentation => false} %>
+</ul>
+<% end %>
+
+</div>

@@ -1,0 +1,23 @@
+<% if flash[:errors] %>
+<div class="alert alert-error">  
+  <a class="close" data-dismiss="alert">&times;</a>
+  <strong>Error!</strong><br />
+  <ul>
+  <% flash[:errors].each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+  </ul>
+</div>
+<% end %>
+
+<% if flash[:notices] %>
+<div class="alert">  
+  <a class="close" data-dismiss="alert">&times;</a>
+  <strong>Notice:</strong><br />
+  <ul>
+  <% flash[:notices].each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+  </ul>
+</div>
+<% end %>

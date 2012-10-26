@@ -1,0 +1,11 @@
+<div id="event_header">
+<h1><%= link_to @event.name, @event %></h1>
+<h3><%= @event.tz_start.strftime('%l:%M %p, %B %e, %Y') %> to <%= @event.tz_end.strftime('%l:%M %p, %B %e, %Y') %></h3>
+<h4><%= link_to('Facebook Event Page', '//www.facebook.com/' + @event.fbid) %></h4>
+<% unless @event.attending?(@current_user, @api) %>
+<div class="alert alert-info">
+  <a class="close" data-dismiss="alert">&times;</a>
+  <strong>Warning!</strong> Looks like you aren't attending the <%= link_to 'Facebook event', '//www.facebook.com/' + @event.fbid %>. You can't submit a hack or win a raffle without <%= link_to 'RSVP', '//www.facebook.com/' + @event.fbid %>ing!
+</div>
+<% end %>
+</div>

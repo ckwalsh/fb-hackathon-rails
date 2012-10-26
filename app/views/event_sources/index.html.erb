@@ -1,0 +1,30 @@
+<h1>Listing event_sources</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>FBID</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<% @event_sources.each do |event_source| %>
+  <tr>
+    <td>
+      <%= link_to event_source.name, 'https://www.facebook.com/' + event_source.fbid %>
+    </td>
+    <td>
+      <%= event_source.fbid %>
+    </td>
+    <td><%= link_to 'Load upcoming events', load_events_event_source_path(event_source), :method => :post %></td>
+    <td><%= link_to 'Destroy', event_source, :method => :delete, :data => { :confirm => 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Event source', new_event_source_path %>
