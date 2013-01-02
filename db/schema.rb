@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024004818) do
+ActiveRecord::Schema.define(:version => 20121229210840) do
 
   create_table "event_sources", :force => true do |t|
     t.string   "fbid"
@@ -54,9 +54,11 @@ ActiveRecord::Schema.define(:version => 20121024004818) do
   end
 
   create_table "users", :force => true do |t|
-    t.string "fbid"
-    t.string "name"
-    t.string "role"
+    t.string  "fbid"
+    t.string  "name"
+    t.string  "role"
+    t.string  "access_token"
+    t.integer "token_expire"
   end
 
 end
