@@ -35,7 +35,7 @@ class Event < ActiveRecord::Base
 
   def attendees(api)
     key = fbid + ':attendees'
-    Rails.cache.fetch(key, :expires_in => 2.minutes) do
+    fbids = Rails.cache.fetch(key, :expires_in => 2.minutes) do
       set = {}
       api.get_connections(fbid, 'attending').each do |info|
         if info['rsvp_status'] == 'attending'
@@ -45,6 +45,40 @@ class Event < ActiveRecord::Base
       end
 
       set.keys
+    end
+
+    User.where(:fbid => fbids).all.collect do |u|
+      u.id
+    end
+  end
+
+  def load_old_hacks!(api)
+    return if api.nil?
+
+    api.get_connections(fbid, 'feed').each do |post|
+      next unless post.has_key?('application') && post['application']['id'] == '136348336398305'
+
+      
+      u = post.has_key?('picture') && URI.parse(post['picture'])
+      q = u && CGI::parse(u.query)
+      
+      hack = Hack.find_by_published_fbid(post['id']) || Hack.new
+      hack.published_fbid = post['id']
+      puts post.inspect
+      hack.name = post['name'] || 'Unable to load name'
+      hack.description = post['description'] || 'Unable to load description'
+      hack.url = post.has_key?('link') ? post['link'] : nil
+      hack.image_url = q.instance_of?(Hash) ? q['src'].first : nil
+      hack.event_id = self.id
+      hack.save!
+
+      user = User.get_or_create_by_fbid(post['from']['id'], api)
+      
+      assoc = HackMembersAssoc.new
+      assoc.hack_id = hack.id
+      assoc.user_id = user.id
+      assoc.confirmed = true
+      assoc.save!
     end
   end
 end
