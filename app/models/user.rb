@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :hack_members_assoc
+  has_many :hack_members_assoc, :dependent => :destroy
   has_many :hacks, :through => :hack_members_assoc
 
   attr_accessible :fbid, :name

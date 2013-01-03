@@ -1,10 +1,10 @@
 class Hack < ActiveRecord::Base
   belongs_to :event
-  has_many :hack_members_assocs
-  has_many :confirmed_members_assocs, :source => :hack_members_assocs, :conditions => {:confirmed => true}
-  has_many :unconfirmed_members_assocs, :source => :hack_members_assocs, :conditions => {:confirmed => false}
-  has_many :confirmed_members, :through => :hack_members_assocs, :source => :user, :class_name => 'User'
-  has_many :unconfirmed_members, :through => :hack_members_assocs, :source => :user, :class_name => 'User'
+  has_many :hack_members_assocs, :dependent => :destroy
+  has_many :confirmed_members_assocs, :source => :hack_members_assocs, :class_name => 'HackMembersAssoc', :conditions => {:confirmed => true}
+  has_many :unconfirmed_members_assocs, :source => :hack_members_assocs, :class_name => 'HackMembersAssoc', :conditions => {:confirmed => false}
+  has_many :confirmed_members, :through => :confirmed_members_assocs, :source => :user, :class_name => 'User'
+  has_many :unconfirmed_members, :through => :unconfirmed_members_assocs, :source => :user, :class_name => 'User'
 
   attr_accessible :description, :image_url, :name, :source_url, :url, :first
   validates :name, :description, :event, :presence => true

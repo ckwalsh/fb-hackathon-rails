@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  has_many :hacks
+  has_many :hacks, :dependent => :destroy
   has_many :hacks_in_progress, :source => :hacks, :class_name => 'Hack', :conditions => 'hacks.published_fbid IS NULL'
   has_many :hacks_completed, :source => :hacks, :class_name => 'Hack', :conditions => 'hacks.published_fbid IS NOT NULL'
   belongs_to :event_source
