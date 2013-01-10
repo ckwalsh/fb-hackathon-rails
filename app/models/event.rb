@@ -30,7 +30,7 @@ class Event < ActiveRecord::Base
 
   def attending?(user, api)
     return true if user.id.nil?
-    attendees(api).include?(user.fbid)
+    attendees(api).include?(user.id)
   end
 
   def attendees(api)
