@@ -42,3 +42,4 @@ gem 'jquery-rails'
 
 gem 'cancan'
 gem 'koala'
+gem 'dalli'
