@@ -2,11 +2,23 @@
 
 <div id="raffle_body">
   <% if @winner %>
-    <h2>And the Winner is...</h2>
-    <%= avatar_tag(@winner, 'large') %>
-    <h3><%= @winner.name %></h3>
-    <h4><%= @event.timezoneize(@now).strftime('%l:%M %p') %></h4>
+    <div id="raffle_entries_body">
+      <h3>Drawing from...</h3>
+      <div id="raffle_entries">
+        <% @entries.each do |user| %>
+          <%= link_to avatar_tag(user), fb_user_path(user) %>
+        <% end %>
+      </div>
+    </div>
+    <div id="raffle_winner_body" style="display: none">
+      <h2 id="raffle_winner_teaser">And the Winner is...</h2>
+      <div id="raffle_winner" style="display: none">
+        <%= avatar_tag(@winner, 'large') %>
+        <h3><%= @winner.name %></h3>
+        <h4><%= @event.timezoneize(@now).strftime('%l:%M %p') %></h4>
+      </div>
+    </div>
   <% else %>
-    <h2>No winners yet...</h2>
+    <h2>No entries yet...</h2>
   <% end %>
 </div>

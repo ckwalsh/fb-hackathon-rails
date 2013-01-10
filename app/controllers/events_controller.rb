@@ -46,6 +46,11 @@ class EventsController < ApplicationController
   def show
     @hack = Hack.new(flash[:hack])
 
+    if @current_user.id?
+      my_hack_ids = @current_user.hack_ids & @event.hack_ids
+      @my_hacks = Hack.where(:id => my_hack_ids)
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @event }
@@ -53,18 +58,11 @@ class EventsController < ApplicationController
   end
 
   def raffle
-    user_ids = {}
-    @event.hacks.each do |hack|
-      hack.confirmed_member_ids.each do |uid|
-        user_ids[uid] = uid
-      end
+    @entries = @event.raffle_eligible_users(@api).sort do |a, b|
+      a.fbid <=> b.fbid
     end
-
-    user_ids = user_ids.keys & @event.attendees(@api)
-
-    uid = user_ids.shuffle.pop
-
-    @winner = User.find(uid) unless uid.nil?
+    
+    @winner = @entries.shuffle.pop
   end
 
   def order

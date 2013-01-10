@@ -8,6 +8,13 @@
 <%= button_to 'Presentation Order', order_event_path(@event), :method => :get, :form_class => 'button_to_form', :class => 'btn btn-large btn-primary' if can?(:order, @event) && !@event.hacks_completed.empty? %>
 <%= button_to 'Raffle a Prize', raffle_event_path(@event), :method => :get, :form_class => 'button_to_form', :class => 'btn btn-large btn-info' if can? :raffle, @event %>
 
+<% if @my_hacks %>
+<h2>My Hacks</h2>
+<ul class="unstyled hack_list">
+  <%= render :partial => 'hacks/listing', :collection => @my_hacks, :locals => {:presentation => false} %>
+</ul>
+<% end %>
+
 <h2>Completed Hacks</h2>
 
 <% if @event.hacks_completed.empty? %>
@@ -18,8 +25,10 @@
 </ul>
 <% end %>
 
-<h2>Hacks in Progress</h2>
+<%= link_to 'Show Hacks in progress', '#', :class => 'btn btn-warning', :id => 'hip_toggle' %>
 
+<div id="hip">
+<h2>Hacks in Progress</h2>
 <% if @event.hacks_in_progress.empty? %>
   <p>No hacks have been submitted yet. Get cracking!</p>
 <% else %>
@@ -27,5 +36,6 @@
   <%= render :partial => 'hacks/listing', :collection => @event.hacks_in_progress, :locals => {:presentation => false} %>
 </ul>
 <% end %>
+</div>
 
 </div>

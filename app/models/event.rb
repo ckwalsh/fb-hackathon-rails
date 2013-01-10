@@ -52,6 +52,19 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def raffle_eligible_users(api)
+    user_ids = {}
+    hacks.each do |hack|
+      hack.confirmed_member_ids.each do |uid|
+        user_ids[uid] = uid
+      end
+    end
+
+    user_ids = user_ids.keys & attendees(api)
+
+    User.where(:id => user_ids)
+  end
+
   def load_old_hacks!(api)
     return if api.nil?
 
